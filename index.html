@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Baseball Live</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- 頁首 -->
+    <header class="header">
+      <h1>AI 棒球賽事語音轉錄與勝負預測系統 (Demo UI)</h1>
+      <nav>
+        <button data-tab="live" class="active">Live</button>
+        <button data-tab="upload">上傳/轉錄</button>
+        <button data-tab="history">歷史回放</button>
+      </nav>
+    </header>
+
+    <!-- 主內容 -->
+    <main>
+      <!-- Live Tab -->
+      <section id="tab-live" class="tab active">
+        <h2>Live Dashboard</h2>
+        <div class="panel">
+          <h3>記分板 (逐局)</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Team</th><th>1</th><th>2</th><th>3</th><th>4</th><th>R</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Away</td><td>0</td><td>1</td><td>0</td><td>2</td><td>3</td></tr>
+              <tr><td>Home</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="panel">
+          <h3>下局預測</h3>
+          <p>A隊勝率 62%（示意）</p>
+        </div>
+        <div class="panel">
+          <h3>事件時間軸</h3>
+          <ul>
+            <li>[3下] HR（2分）</li>
+            <li>[2上] 三振</li>
+            <li>[1上] Lead-off single</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <h3>即時逐字稿</h3>
+          <pre>
+[00:10] Ground ball to short... out!
+[00:12] Lead-off single...
+[05:31] Swing and a miss — strike three!
+          </pre>
+        </div>
+      </section>
+
+      <!-- Upload Tab -->
+      <section id="tab-upload" class="tab">
+        <h2>上傳 / 轉錄</h2>
+        <div class="panel">
+          <p>這裡會放上傳檔案或貼上 URL 的介面（示意）。</p>
+        </div>
+      </section>
+
+      <!-- History Tab -->
+      <section id="tab-history" class="tab">
+        <h2>歷史回放</h2>
+        <div class="panel">
+          <p>2024-08-11 A隊 vs B隊 — 可回放（示意）</p>
+          <p>2024-08-12 A隊 vs C隊 — 可回放（示意）</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- 頁尾 -->
+    <footer>
+      Demo UI for 「AI Baseball Live」 — GitHub Pages
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
