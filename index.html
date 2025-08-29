@@ -1,86 +1,98 @@
 <!doctype html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AI Baseball Live</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <!-- 頁首 -->
-    <header class="header">
-      <h1>AI 棒球賽事語音轉錄與勝負預測系統 (Demo UI)</h1>
-      <nav>
-        <button data-tab="live" class="active">Live</button>
-        <button data-tab="upload">上傳/轉錄</button>
-        <button data-tab="history">歷史回放</button>
-      </nav>
-    </header>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Baseball — Live Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container row between">
+      <div class="row gap">
+        <span class="logo">⚾</span>
+        <strong>AI Baseball — Live Dashboard</strong>
+      </div>
+      <div class="small">EN / 繁中</div>
+    </div>
+  </header>
 
-    <!-- 主內容 -->
-    <main>
-      <!-- Live Tab -->
-      <section id="tab-live" class="tab active">
-        <h2>Live Dashboard</h2>
-        <div class="panel">
-          <h3>記分板 (逐局)</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Team</th><th>1</th><th>2</th><th>3</th><th>4</th><th>R</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>Away</td><td>0</td><td>1</td><td>0</td><td>2</td><td>3</td></tr>
-              <tr><td>Home</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
-            </tbody>
-          </table>
+  <main class="container main">
+    <!-- 控制列：選隊、手動事件 -->
+    <section class="panel">
+      <div class="row wrap between">
+        <div class="row gap">
+          <label>客隊(Away)
+            <input id="teamAway" value="Away" />
+          </label>
+          <label>主隊(Home)
+            <input id="teamHome" value="Home" />
+          </label>
         </div>
-        <div class="panel">
-          <h3>下局預測</h3>
-          <p>A隊勝率 62%（示意）</p>
-        </div>
-        <div class="panel">
-          <h3>事件時間軸</h3>
-          <ul>
-            <li>[3下] HR（2分）</li>
-            <li>[2上] 三振</li>
-            <li>[1上] Lead-off single</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>即時逐字稿</h3>
-          <pre>
-[00:10] Ground ball to short... out!
-[00:12] Lead-off single...
-[05:31] Swing and a miss — strike three!
-          </pre>
-        </div>
-      </section>
 
-      <!-- Upload Tab -->
-      <section id="tab-upload" class="tab">
-        <h2>上傳 / 轉錄</h2>
-        <div class="panel">
-          <p>這裡會放上傳檔案或貼上 URL 的介面（示意）。</p>
+        <div class="row gap">
+          <button class="btn" data-evt="single">安打(1B)</button>
+          <button class="btn" data-evt="double">二壘安打(2B)</button>
+          <button class="btn" data-evt="walk">保送(BB)</button>
+          <button class="btn" data-evt="out">出局(Out)</button>
+          <button class="btn warning" id="endHalf">結束半局</button>
+          <button class="btn primary" id="reset">重置比賽</button>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- History Tab -->
-      <section id="tab-history" class="tab">
-        <h2>歷史回放</h2>
-        <div class="panel">
-          <p>2024-08-11 A隊 vs B隊 — 可回放（示意）</p>
-          <p>2024-08-12 A隊 vs C隊 — 可回放（示意）</p>
+    <!-- 上半：記分板 + 壘包狀態 -->
+    <section class="grid grid-2">
+      <div class="panel">
+        <h3 class="title">記分板 (逐局)</h3>
+        <table id="scoreTable" class="table"></table>
+      </div>
+
+      <div class="panel">
+        <h3 class="title">場上狀態</h3>
+        <div class="row between">
+          <div class="diamond">
+            <div class="diamond-outline"></div>
+            <div id="base2" class="base base-2"></div>
+            <div id="base3" class="base base-3"></div>
+            <div id="base1" class="base base-1"></div>
+            <div class="home">Home</div>
+          </div>
+          <div class="col gap">
+            <div class="pill">局數：<b id="inningLbl">1 上</b></div>
+            <div class="pill">出局數：<b id="outsLbl">0</b></div>
+            <div class="pill">球數：<b id="countLbl">0-0</b>（示意）</div>
+          </div>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <!-- 頁尾 -->
-    <footer>
-      Demo UI for 「AI Baseball Live」 — GitHub Pages
-    </footer>
+    <!-- 下半：下局預測 + 事件時間軸 -->
+    <section class="grid grid-2">
+      <div class="panel">
+        <h3 class="title">下局預測</h3>
+        <div class="row between">
+          <div>
+            <div class="big accent"><span id="winProbNext">50</span>%</div>
+            <div class="small" id="winProbLabel">Away 下局勝率（示意模型）</div>
+          </div>
+          <div class="badge" id="deltaBadge">變動 +0.00</div>
+        </div>
+        <div class="small mt">預測比分差(下局)：<b id="predDelta">+0.00</b></div>
+        <div class="small mt">說明：以目前比數、壘包/出局、局數 + 簡化歷史常態估計。</div>
+      </div>
 
-    <script src="app.js"></script>
-  </body>
+      <div class="panel">
+        <h3 class="title">事件時間軸</h3>
+        <ul id="timeline" class="timeline"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer small">
+    Demo UI（只留：記分板 / 下局勝率 / 下局比分差）— 供 GitHub Pages 預覽
+  </footer>
+
+  <script src="app.js"></script>
+</body>
 </html>
